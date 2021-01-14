@@ -48,7 +48,7 @@ bool mouseIsActive = false;    // whether or not to control the mouse
 int lastSwitchState = LOW;        // previous switch state
 
 void setup() {
-  pinMode(switchPin, INPUT);       // the switch pin
+  pinMode(switchPin, INPUT_PULLUP);       // the switch pin
   pinMode(ledPin, OUTPUT);         // the LED pin
   // take control of the mouse:
   Mouse.begin();
