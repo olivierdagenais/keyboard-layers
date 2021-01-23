@@ -71,10 +71,12 @@ void loop() {
   // read and scale the two axes:
   int xReading = readAxis(A0);
   int yReading = readAxis(A1);
+  int zReading = readAxis(A2);
+  int wheel = (zReading == 0 ? 0 : (zReading > 0 ? 1 : -1));
 
   // if the mouse control state is active, move the mouse:
   if (mouseIsActive) {
-    Mouse.move(xReading, yReading, 0);
+    Mouse.move(xReading, yReading, wheel);
   }
 
   // read the mouse button and click or not click:
