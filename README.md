@@ -1,3 +1,3 @@
-# keyboard-layers
+# keyborg-alpha
 
-Arduino sketch that enhances a keyboard connected via a USB Host Shield
+Arduino sketch to enhance an ergonomic keyboard.
