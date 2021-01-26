@@ -1,6 +1,7 @@
 // Arduino sketch to enhance an ergonomic keyboard.
 // Copyright (C) 2021  Olivier Dagenais. All rights reserved.
-// Licensed under the GNU General Public License. See LICENSE in the project root.
+// Licensed under the GNU General Public License. See LICENSE in the project
+// root.
 
 #include "Mouse.h"
 
