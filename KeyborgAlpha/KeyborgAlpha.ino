@@ -50,8 +50,48 @@ class Button {
     }
 };
 
+class AnalogAxis {
+  protected:
+    const uint8_t _analogPin;
+    const uint16_t _minAnalogValue;
+    const uint16_t _maxAnalogValue;
+    const uint16_t _range;
+    const uint16_t _threshold;
+    const uint16_t _center;
+    // TODO: add throttle
+
+  public:
+    AnalogAxis(uint8_t analogPin,
+               int16_t minAnalogValue,
+               int16_t maxAnalogValue,
+               uint16_t range,
+               uint16_t threshold)
+        : _analogPin(analogPin),
+          _minAnalogValue(minAnalogValue),
+          _maxAnalogValue(maxAnalogValue),
+          _range(range),
+          _threshold(threshold),
+          _center(range / 2) {
+        // Do I need to initialize the pin?
+    }
+
+    int16_t read() {
+        int16_t reading = analogRead(_analogPin);
+        int16_t adjusted =
+            map(reading, _minAnalogValue, _maxAnalogValue, 0, _range);
+        int16_t distance = adjusted - _center;
+        if (abs(distance) < _threshold) {
+            distance = 0;
+        }
+        return distance;
+    }
+};
+
 const int NUM_BUTTONS = 5;
 Button *_buttons[NUM_BUTTONS];
+
+const int NUM_ANALOG_AXIS = 3;
+AnalogAxis *_analogAxis[NUM_ANALOG_AXIS];
 
 bool _mouseActive = false;
 void toggleMouseActive() { _mouseActive = !_mouseActive; }
@@ -62,6 +102,12 @@ void setup() {
     _buttons[2] = new Button(4, &toggleMouseActive, NULL);
     _buttons[3] = new Button(5, &toggleMouseActive, NULL);
     _buttons[4] = new Button(6, &toggleMouseActive, NULL);
+
+    _analogAxis[0] = new AnalogAxis(0, 1023, 0, 10, 2);
+    _analogAxis[1] = new AnalogAxis(1, 1023, 0, 10, 2);
+    // https://www.sparkfun.com/products/9426 (Thumb Slide Joystick) says:
+    // "(...)you can expect a range of about 128 to 775 on each axis."
+    _analogAxis[2] = new AnalogAxis(2, 128, 775, 12, 3);
     Serial.begin(115200);
     Mouse.begin();
 }
@@ -71,5 +117,12 @@ void loop() {
         _buttons[b]->scan();
     }
 
+    int16_t x = _analogAxis[0]->read();
+    int16_t y = _analogAxis[1]->read();
+    int16_t z = _analogAxis[2]->read();
+    int16_t wheel = (z == 0 ? 0 : (z > 0 ? -1 : 1));
+    if (_mouseActive) {
+        Mouse.move(x, y, wheel);
+    }
     delay(5);
 }
