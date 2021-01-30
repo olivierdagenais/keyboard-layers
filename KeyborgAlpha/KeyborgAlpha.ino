@@ -34,16 +34,16 @@ class Button {
         if (_currentButtonState) { // button was previously pressed
             if (!newState) {       // now it's released
                 _currentButtonState = false;
-                if (_pressed != NULL) {
-                    _pressed();
+                if (_released != NULL) {
+                    _released();
                 }
             }
         }
         else {              // button wasn't pressed
             if (newState) { // now it's pressed
                 _currentButtonState = true;
-                if (_released != NULL) {
-                    _released();
+                if (_pressed != NULL) {
+                    _pressed();
                 }
             }
         }
