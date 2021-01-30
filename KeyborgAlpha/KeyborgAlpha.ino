@@ -129,7 +129,7 @@ void loop() {
     int16_t x = _analogAxis[3]->read(_percent);
     int16_t y = _analogAxis[2]->read(_percent);
     int16_t wheel = (z == 0 ? 0 : (z > 0 ? -1 : 1));
-    if (_mouseActive) {
+    if (_mouseActive && (x != 0 || y != 0 || z != 0)) {
         Mouse.move(x, y, wheel);
     }
 
