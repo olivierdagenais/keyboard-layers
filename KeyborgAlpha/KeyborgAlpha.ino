@@ -128,8 +128,8 @@ void setup() {
     _analogAxis[1] = new AnalogAxis(1, 1023, 0, 10, 2, 50, 0.1);
     // https://www.sparkfun.com/products/9426 (Thumb Slide Joystick) says:
     // "(...)you can expect a range of about 128 to 775 on each axis."
-    _analogAxis[2] = new AnalogAxis(2, 128, 775, 8, 2, 16, 0.1);
-    _analogAxis[3] = new AnalogAxis(3, 128, 775, 8, 2, 16, 0.1);
+    _analogAxis[2] = new AnalogAxis(2, 128, 775, 6, 2, 20, 0.2);
+    _analogAxis[3] = new AnalogAxis(3, 128, 775, 6, 2, 20, 0.2);
     Serial.begin(115200);
     Mouse.begin();
 }
