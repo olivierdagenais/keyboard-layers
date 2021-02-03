@@ -108,12 +108,21 @@ AnalogAxis *_analogAxis[NUM_ANALOG_AXIS];
 bool _mouseActive = false;
 void toggleMouseActive() { _mouseActive = !_mouseActive; }
 
+void leftPress() { Mouse.press(MOUSE_LEFT); }
+void leftRelease() { Mouse.release(MOUSE_LEFT); }
+
+void middlePress() { Mouse.press(MOUSE_MIDDLE); }
+void middleRelease() { Mouse.release(MOUSE_MIDDLE); }
+
+void rightPress() { Mouse.press(MOUSE_RIGHT); }
+void rightRelease() { Mouse.release(MOUSE_RIGHT); }
+
 void setup() {
     _buttons[0] = new Button(2, &toggleMouseActive, NULL);
     _buttons[1] = new Button(3, &toggleMouseActive, NULL);
-    _buttons[2] = new Button(4, &toggleMouseActive, NULL);
-    _buttons[3] = new Button(5, &toggleMouseActive, NULL);
-    _buttons[4] = new Button(6, &toggleMouseActive, NULL);
+    _buttons[2] = new Button(4, &middlePress, &middleRelease);
+    _buttons[3] = new Button(5, &rightPress, &rightRelease);
+    _buttons[4] = new Button(6, &leftPress, &leftRelease);
 
     _analogAxis[0] = new AnalogAxis(0, 1023, 0, 2, 2, 50, 0.1);
     _analogAxis[1] = new AnalogAxis(1, 1023, 0, 2, 2, 50, 0.1);
