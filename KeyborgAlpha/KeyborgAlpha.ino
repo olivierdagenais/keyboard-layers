@@ -59,6 +59,8 @@ class AnalogAxis {
     const uint16_t _threshold;
     const uint16_t _center;
     const uint8_t _throttle;
+    const float _acceleration;
+    float _multiplier = 1;
 
   public:
     AnalogAxis(uint8_t analogPin,
@@ -66,14 +68,16 @@ class AnalogAxis {
                int16_t maxAnalogValue,
                uint16_t range,
                uint16_t threshold,
-               uint8_t throttle)
+               uint8_t throttle,
+               float acceleration)
         : _analogPin(analogPin),
           _minAnalogValue(minAnalogValue),
           _maxAnalogValue(maxAnalogValue),
           _range(range),
           _threshold(threshold),
           _center(range / 2),
-          _throttle(throttle) {
+          _throttle(throttle),
+          _acceleration(acceleration) {
         // Do I need to initialize the pin?
     }
 
@@ -87,7 +91,10 @@ class AnalogAxis {
         int16_t distance = adjusted - _center;
         if (abs(distance) < _threshold) {
             distance = 0;
+            _multiplier = 1;
         }
+        distance = distance * _multiplier;
+        _multiplier += _acceleration;
         return distance;
     }
 };
@@ -108,12 +115,12 @@ void setup() {
     _buttons[3] = new Button(5, &toggleMouseActive, NULL);
     _buttons[4] = new Button(6, &toggleMouseActive, NULL);
 
-    _analogAxis[0] = new AnalogAxis(0, 1023, 0, 10, 2, 50);
-    _analogAxis[1] = new AnalogAxis(1, 1023, 0, 10, 2, 50);
+    _analogAxis[0] = new AnalogAxis(0, 1023, 0, 2, 2, 50, 0.1);
+    _analogAxis[1] = new AnalogAxis(1, 1023, 0, 2, 2, 50, 0.1);
     // https://www.sparkfun.com/products/9426 (Thumb Slide Joystick) says:
     // "(...)you can expect a range of about 128 to 775 on each axis."
-    _analogAxis[2] = new AnalogAxis(2, 128, 775, 12, 3, 16);
-    _analogAxis[3] = new AnalogAxis(3, 128, 775, 12, 3, 16);
+    _analogAxis[2] = new AnalogAxis(2, 128, 775, 10, 3, 16, 0.1);
+    _analogAxis[3] = new AnalogAxis(3, 128, 775, 10, 3, 16, 0.1);
     Serial.begin(115200);
     Mouse.begin();
 }
